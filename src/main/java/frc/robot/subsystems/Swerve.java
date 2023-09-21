@@ -2,14 +2,13 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,18 +21,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
-    public AHRS gyro;
-
-    public double facing;
-    private double gyroZero;
+    public Pigeon2 gyro;
 
     public Swerve() {
-        gyro = new AHRS(Constants.Swerve.navXID);
-        gyro.calibrate();
-        // gyro.zeroYaw();
-
-        facing = 0;
-        gyroZero = 0;
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro.configFactoryDefault();
+        zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -106,63 +99,17 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro(){
-        gyro.zeroYaw();
-        facing = 0;
-    }
-
-    public void increaseSpeed() {
-        SmartDashboard.putNumber("Coefficient:", RobotContainer.speedCoefficient);
-        if (RobotContainer.speedCoefficient >= 0.9){
-            System.out.println("Speed at maximum.");
-            RobotContainer.speedCoefficient = 0.9;
-            return;
-        }
-        RobotContainer.speedCoefficient += 0.1;
-        System.out.println(RobotContainer.speedCoefficient);
-    }
-
-    public void decreaseSpeed() {
-        SmartDashboard.putNumber("Coefficient:", RobotContainer.speedCoefficient);
-        if (RobotContainer.speedCoefficient <= 0.2){
-            System.out.println("Speed at minimum.");
-            RobotContainer.speedCoefficient = 0.2;
-            return;
-        }
-        RobotContainer.speedCoefficient -= 0.1;
-        System.out.println(RobotContainer.speedCoefficient);
-    }
-
-    public void setCoefficent(final double coefficient) {
-        SmartDashboard.putNumber("Coefficient:", RobotContainer.speedCoefficient);
-        RobotContainer.speedCoefficient = coefficient;
-        System.out.println(RobotContainer.speedCoefficient);
-    }
-
-    public double getCoefficient() {
-        return RobotContainer.speedCoefficient;
+        gyro.setYaw(0);
     }
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
-    public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(gyro.getRoll());
-    }
-
-    public Rotation2d getPitch() {
-        return Rotation2d.fromDegrees(gyro.getPitch());
-    }
-
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
-    }
-
-    public void off(){
-        facing = getYaw().getRadians();
-        drive(new Translation2d(), 0, false, true);
     }
 
     @Override
@@ -175,8 +122,4 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
     }
-
-    // public void setGyro(double angle){
-    //     gyroZero = 
-    // }
 }
