@@ -1,0 +1,21 @@
+[
+  {
+    "type": "java",
+    "name": "jar (in project 2023-preseason)",
+    "extensions": [
+      {
+        "name": "Sim DriverStation",
+        "libName": "/Users/kaien/Documents/GitHub/2023-preseason/build/jni/release/libhalsim_ds_socket.dylib",
+        "defaultEnabled": false
+      },
+      {
+        "name": "Sim GUI",
+        "libName": "/Users/kaien/Documents/GitHub/2023-preseason/build/jni/release/libhalsim_gui.dylib",
+        "defaultEnabled": true
+      }
+    ],
+    "environment": {},
+    "libraryDir": "/Users/kaien/Documents/GitHub/2023-preseason/build/jni/release",
+    "mainClassName": "frc.robot.Main"
+  }
+]
