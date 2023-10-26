@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.SPI;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
@@ -13,7 +14,7 @@ public final class Constants {
   public static final class Swerve {
     public static final double stickDeadband = 0.1;
 
-    public static final int pigeonID = 1;
+    public static final SPI.Port navXPort = SPI.Port.kMXP;
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
     /* Drivetrain Constants */
