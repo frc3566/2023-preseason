@@ -27,6 +27,7 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         gyro = new AHRS(Constants.Swerve.navXPort);
         gyro.calibrate();
+        zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -38,7 +39,7 @@ public class Swerve extends SubsystemBase {
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
-        Timer.delay(1.0);
+        Timer.delay(3.0);
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
@@ -120,7 +121,7 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getPitch());
     }
 
-    public void resetModulesToAbsolute(){
+    public void resetModulesToAbsolute() {
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }

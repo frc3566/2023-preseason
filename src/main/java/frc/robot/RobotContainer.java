@@ -29,9 +29,12 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton resetModules = new JoystickButton(driver, XboxController.Button.kB.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+
+    private Command reset = new reset(s_Swerve);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -59,6 +62,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        resetModules.onTrue(reset);
     }
 
     /**
